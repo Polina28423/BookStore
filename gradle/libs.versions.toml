@@ -11,7 +11,13 @@ composeBom = "2024.04.01"
 gmsVersion = "4.4.2"
 bomVersion = "33.6.0"
 
+navigationCompose = "2.8.0-beta05"
+serializationVersion = "2.0.20"
+serializationKotlin = "1.7.3"
+
 [libraries]
+kotlin-serialization-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serializationKotlin"}
+androidx-navigation-compose = {module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose"}
 
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "bomVersion" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore-ktx"}
@@ -38,3 +44,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 gms = { id = "com.google.gms.google-services", version.ref = "gmsVersion" }
 
+serialization = {id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serializationVersion"}

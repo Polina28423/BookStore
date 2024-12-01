@@ -27,7 +27,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.bookstore.login.LoginScreen
+import com.example.bookstore.login.data.LoginScreenIObject
+import com.example.bookstore.login.data.MainScreenDataObject
 import com.example.bookstore.main_screen.MainScreen
 import com.example.bookstore.ui.theme.BookStoreTheme
 
@@ -35,7 +41,24 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LoginScreen()
+            val navController = rememberNavController()
+
+            NavHost(
+                navController = navController,
+                startDestination = LoginScreenIObject){
+
+                composable<LoginScreenIObject>{
+                    LoginScreen{ navData ->
+                        navController.navigate(navData)
+                    }
+                }
+
+                composable<MainScreenDataObject>{ navEntry ->
+                    val  navData = navEntry.toRoute<MainScreenDataObject>()
+                    MainScreen()
+                }
+
+            }
         }
     }
 

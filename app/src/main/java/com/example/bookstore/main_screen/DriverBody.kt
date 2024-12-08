@@ -1,5 +1,6 @@
 package com.example.bookstore.main_screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,11 +10,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,8 +30,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bookstore.R
+import com.example.bookstore.ui.theme.ButtonColor
 import com.example.bookstore.ui.theme.DarkBrown
 import com.example.bookstore.ui.theme.GreyLight
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 
 @Composable
 fun DriverBody() {
@@ -34,6 +45,15 @@ fun DriverBody() {
         "Drama",
         "BestSellers"
     )
+    val isAdminState = remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(Unit) {
+        isAdmin { isAdmin ->
+            isAdminState.value = isAdmin
+        }
+    }
     Box(modifier = Modifier.fillMaxSize().background(DarkBrown)){
         Image(
             painter = painterResource(id = R.drawable.book_tree),
@@ -58,7 +78,7 @@ fun DriverBody() {
                     .height(1.dp)
                     .background(GreyLight)
             )
-            LazyColumn(Modifier.fillMaxSize()) {
+            LazyColumn(Modifier.fillMaxWidth()) {
                 items(categoriesList) { item ->
                     Column(Modifier
                         .fillMaxWidth()
@@ -82,7 +102,27 @@ fun DriverBody() {
                     }
                 }
             }
+            if(isAdminState.value) Button(
+                onClick = { },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = ButtonColor
+                )
+            ) {
+                Text(text = "Admin panel")
+            }
         }
     }
+
+}
+
+fun isAdmin(onAdmin: (Boolean) -> Unit){
+    val uid = Firebase.auth.currentUser!!.uid
+    val db = Firebase.firestore.collection("admins")
+        .document(uid).get().addOnSuccessListener{
+            onAdmin(it.get("isAdmin") as Boolean)
+        }
 }
 

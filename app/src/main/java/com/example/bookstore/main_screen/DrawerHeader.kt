@@ -21,7 +21,7 @@ import com.example.bookstore.R
 import com.example.bookstore.ui.theme.DarkBrown
 
 @Composable
-fun DrawerHeader() {
+fun DrawerHeader(email: String) {
     Column (
         Modifier.fillMaxWidth()
             .height(170.dp)
@@ -40,6 +40,11 @@ fun DrawerHeader() {
             color = Color.White,
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold
+        )
+        Text(
+            email,
+            color = Color.Gray,
+            fontSize = 16.sp,
         )
     }
 }

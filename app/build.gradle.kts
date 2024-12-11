@@ -44,6 +44,9 @@ android {
 
 dependencies {
 
+    implementation(libs.coil.compose)
+    implementation(libs.coil.compose.net)
+
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlin.serialization.json )
 
